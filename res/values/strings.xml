@@ -6,9 +6,9 @@
     <string name="hello_world">Hello world!</string>
 	<string name="calculate">Calculate!</string>
 	<string name="billHint">Enter bill amount</string>
-    <string name="tip">tip:</string>
-    <string name="total">total:</string>
-    <string name="startPercent">Percent: 5%</string>
+    <string name="tipLabel">tip:</string>
+    <string name="totalLabel">total:</string>
+    <string name="PercentLabel">Percent:</string>
 	
 	
 </resources>

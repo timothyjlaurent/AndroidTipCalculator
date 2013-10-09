@@ -2,8 +2,9 @@ package com.codepath.example.tipcalculator;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -26,10 +27,23 @@ public class MainActivity extends Activity {
         tvPercent = (TextView) findViewById(R.id.tvPercent);
         tvTip  = (TextView) findViewById(R.id.tvTip);
         tvTotal  = (TextView) findViewById(R.id.tvTotal);
-        
-        
         sbTip  = (SeekBar) findViewById(R.id.sbTip);
         
+        refreshDisplay();
+        
+        TextWatcher tw = new TextWatcher() {
+            public void afterTextChanged(Editable s){
+            	refreshDisplay();
+            }
+            public void  beforeTextChanged(CharSequence s, int start, int count, int after){
+              // you can check for enter key here
+            }
+            public void  onTextChanged (CharSequence s, int start, int before,int count) {
+            	
+            } 
+        };
+
+        etBill.addTextChangedListener(tw);
         
         sbTip.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
@@ -37,15 +51,7 @@ public class MainActivity extends Activity {
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				// TODO Auto-generated method stub
-				progress += 5;
-				tvPercent.setText("Percent: "+progress+"%");
-				if(!(etBill.getText().toString().equals(""))){
-			    	
-			    	Double bill = Double.parseDouble(etBill.getText().toString());
-					double tip = bill*progress/100;
-			    	tvTip.setText("Tip: "+progress+ "% :: $"+tip);
-			    	tvTotal.setText("Total: "+bill+tip);
-			    }				
+			refreshDisplay();			
 			}
 
 			@Override
@@ -56,32 +62,37 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
+				// TODO Auto-generated method stu
 			}
-        });
-        
-//        btnCalculate = (Button) findViewById(R.id.btnCalculate);
-//        btnCalculate.setOnClickListener(new View.OnClickListener() {
-//        	@Override
-//        	public void onClick(View v) {
-//        		// Fire when button is pressed
-//        		Double bill = Double.parseDouble(etBill.getText().toString());
-//        		
-//        	}
-//		});
-        
-        
+        });      
     }
+	
+	
+	private void refreshDisplay(){
+		int progress = sbTip.getProgress() + 5;
+		
+		tvPercent.setText((progress)+"%");
+		if(!(etBill.getText().toString().equals(""))){
+	    	
+	    	Double bill = Double.parseDouble(etBill.getText().toString());
+			double tip = bill*progress/100;
+	    	tvTip.setText(String.format("$%.2f", tip));
+	    	double total = bill + tip;
+	    	tvTotal.setText(String.format("$%.2f",total));
+	    }	
+	}
 
 
-    @Override
+
+
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
- 
+    
     
 
 }
